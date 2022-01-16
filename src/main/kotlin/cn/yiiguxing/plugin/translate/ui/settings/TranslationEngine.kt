@@ -5,6 +5,7 @@ import cn.yiiguxing.plugin.translate.trans.Lang
 import cn.yiiguxing.plugin.translate.trans.Translator
 import cn.yiiguxing.plugin.translate.trans.ali.AliTranslator
 import cn.yiiguxing.plugin.translate.trans.baidu.BaiduTranslator
+import cn.yiiguxing.plugin.translate.trans.deepl.DeeplTranslator
 import cn.yiiguxing.plugin.translate.trans.google.GoogleTranslator
 import cn.yiiguxing.plugin.translate.trans.youdao.YoudaoTranslator
 import cn.yiiguxing.plugin.translate.ui.AppKeySettingsDialog
@@ -24,7 +25,8 @@ enum class TranslationEngine(
     GOOGLE("translate.google", message("translator.name.google"), Icons.Google),
     YOUDAO("ai.youdao", message("translator.name.youdao"), Icons.Youdao, 5000),
     BAIDU("fanyi.baidu", message("translator.name.baidu"), Icons.Baidu, 10000, 1000),
-    ALI("translate.ali", message("translator.name.ali"), Icons.Ali, 5000);
+    ALI("translate.ali", message("translator.name.ali"), Icons.Ali, 5000),
+    DEEPL("translate.deepl", message("translator.name.deepl"), Icons.DeepL, 30000);
 
     var primaryLanguage: Lang
         get() {
@@ -33,6 +35,7 @@ enum class TranslationEngine(
                 YOUDAO -> Settings.youdaoTranslateSettings.primaryLanguage
                 BAIDU -> Settings.baiduTranslateSettings.primaryLanguage
                 ALI -> Settings.aliTranslateSettings.primaryLanguage
+                DEEPL -> Settings.deeplTranslateSettings.primaryLanguage
             }
         }
         set(value) {
@@ -41,6 +44,7 @@ enum class TranslationEngine(
                 YOUDAO -> Settings.youdaoTranslateSettings.primaryLanguage = value
                 BAIDU -> Settings.baiduTranslateSettings.primaryLanguage = value
                 ALI -> Settings.aliTranslateSettings.primaryLanguage = value
+                DEEPL -> Settings.deeplTranslateSettings.primaryLanguage = value
             }
         }
 
@@ -51,6 +55,7 @@ enum class TranslationEngine(
                 YOUDAO -> YoudaoTranslator
                 BAIDU -> BaiduTranslator
                 ALI -> AliTranslator
+                DEEPL -> DeeplTranslator
             }
         }
 
@@ -62,6 +67,7 @@ enum class TranslationEngine(
             YOUDAO -> isConfigured(Settings.youdaoTranslateSettings)
             BAIDU -> isConfigured(Settings.baiduTranslateSettings)
             ALI -> isConfigured(Settings.aliTranslateSettings)
+            DEEPL -> isConfigured(Settings.deeplTranslateSettings)
         }
     }
 
@@ -96,6 +102,15 @@ enum class TranslationEngine(
                     Settings.aliTranslateSettings
                 ),
                 HelpTopic.ALI
+            ).showAndGet()
+            DEEPL -> AppKeySettingsDialog(
+                message("settings.deepl.title"),
+                AppKeySettingsPanel(
+                    Icons.load(""),
+                    DEEPL_TRANSLATE_URL, // TODO: URLの差し替え
+                    Settings.deeplTranslateSettings
+                ),
+                HelpTopic.DEEPL
             ).showAndGet()
             else -> true
         }

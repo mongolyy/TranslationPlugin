@@ -1,6 +1,6 @@
 package cn.yiiguxing.plugin.translate
 
-import cn.yiiguxing.plugin.translate.util.Plugin;
+import cn.yiiguxing.plugin.translate.util.Plugin
 
 enum class HelpTopic(id: String, val url: String) {
 
@@ -14,7 +14,9 @@ enum class HelpTopic(id: String, val url: String) {
     BAIDU("baidu", "https://fanyi-api.baidu.com/"),
 
     /** 有道翻译 */
-    YOUDAO("youdao", "https://ai.youdao.com/product-fanyi-text.s");
+    YOUDAO("youdao", "https://ai.youdao.com/product-fanyi-text.s"),
+
+    DEEPL("deepl", "https://www.deepl.com/docs-api");
 
     val id: String = "${Plugin.PLUGIN_ID}.$id"
 

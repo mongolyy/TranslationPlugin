@@ -52,3 +52,5 @@ const val BAIDU_FANYI_PRODUCT_URL = "https://fanyi-api.baidu.com/choose"
 const val ALI_TRANSLATE_URL = "http://mt.aliyuncs.com/api/translate/web/general"
 const val ALI_CAPI_URL = "https://usercenter.console.aliyun.com/#/manage/ak"
 const val ALI_TRANSLATE_PRODUCT_URL = "https://www.aliyun.com/product/ai/base_alimt"
+
+const val DEEPL_TRANSLATE_URL = "https://api-free.deepl.com/v2/translate"
