@@ -1,11 +1,17 @@
+
 package cn.yiiguxing.plugin.translate.trans.deepl
 
+import cn.yiiguxing.plugin.translate.DEEPL_TRANSLATE_URL
 import cn.yiiguxing.plugin.translate.trans.*
 import com.intellij.openapi.diagnostic.Logger
 import cn.yiiguxing.plugin.translate.ui.settings.TranslationEngine.DEEPL
+import cn.yiiguxing.plugin.translate.util.Http
 import cn.yiiguxing.plugin.translate.util.Settings
+import cn.yiiguxing.plugin.translate.util.md5
+import com.google.gson.Gson
 import java.util.*
 import javax.swing.Icon
+import cn.yiiguxing.plugin.translate.util.i
 
 /**
  * DeepL translator
@@ -50,13 +56,8 @@ object DeeplTranslator : AbstractTranslator() {
 
     override val contentLengthLimit: Int = DEEPL.contentLengthLimit
 
-    override val defaultLangForLocale: Lang
-        get() = when (Locale.getDefault()) {
-            Locale.CHINA, Locale.CHINESE -> Lang.AUTO
-            else -> super.defaultLangForLocale
-        }
-
-    override val primaryLanguage: Lang = DEEPL.primaryLanguage
+    override val primaryLanguage: Lang
+        get() = DEEPL.primaryLanguage
 
     override val supportedSourceLanguages: List<Lang> = SUPPORTED_LANGUAGES
     override val supportedTargetLanguages: List<Lang> = SUPPORTED_LANGUAGES
@@ -70,8 +71,38 @@ object DeeplTranslator : AbstractTranslator() {
     }
 
     override fun doTranslate(text: String, srcLang: Lang, targetLang: Lang): Translation {
-        TODO("Not yet implemented")
+        return SimpleTranslateClient(this,
+            DeeplTranslator::call,
+            DeeplTranslator::parseTranslation
+        ).execute(text, srcLang, targetLang)
     }
 
-    // TODO: 他の関数を追加する
+    private fun call(text: String, srcLang: Lang, targetLang: Lang): String {
+        val settings = Settings.deeplTranslateSettings
+        val appId = settings.appId
+        val privateKey = settings.getAppKey()
+        val salt = System.currentTimeMillis().toString()
+        val sign = (appId + text + salt + privateKey).md5().lowercase(Locale.getDefault())
+
+        return Http.postDataFrom(
+            DEEPL_TRANSLATE_URL,
+            "appid" to appId,
+            "from" to srcLang.deeplLanguageCode,
+            "to" to targetLang.deeplLanguageCode,
+            "salt" to salt,
+            "sign" to sign,
+            "q" to text
+        )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private fun parseTranslation(translation: String, original: String, srcLang: Lang, targetLang: Lang): Translation {
+        logger.i("translate result: $translation")
+
+        return Gson().fromJson(translation, DeeplTranslation::class.java).apply {
+            if (!isSuccessful) {
+                throw TranslateResultException(code, name)
+            }
+        }.toTranslation()
+    }
 }

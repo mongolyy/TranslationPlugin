@@ -56,6 +56,9 @@ class Settings : PersistentStateComponent<Settings> {
      */
     var aliTranslateSettings: AliTranslateSettings = AliTranslateSettings()
 
+    /**
+     * DeepL翻译选项
+     */
     var deeplTranslateSettings: DeeplTranslateSettings = DeeplTranslateSettings()
 
     /**
@@ -189,7 +192,7 @@ private const val BAIDU_APP_KEY = "BAIDU_APP_KEY"
 private const val ALI_SERVICE_NAME = "YIIGUXING.TRANSLATION.ALI"
 private const val ALI_APP_KEY = "ALI_APP_KEY"
 private const val DEEPL_SERVICE_NAME = "YIIGUXING.TRANSLATION.DEEPL"
-private const val DEEPL_APP_KEY = "ALI_APP_KEY"
+private const val DEEPL_APP_KEY = "DEEPL_APP_KEY"
 
 private val settingsChangePublisher: SettingsChangeListener =
     ApplicationManager.getApplication().messageBus.syncPublisher(SettingsChangeListener.TOPIC)
@@ -263,6 +266,9 @@ class AliTranslateSettings : AppKeySettings(
     securityKey = ALI_APP_KEY,
 )
 
+/**
+ * DeepL翻译选项
+ */
 class DeeplTranslateSettings : AppKeySettings(
     DeeplTranslator.defaultLangForLocale,
     securityName = DEEPL_SERVICE_NAME,

@@ -94,7 +94,7 @@ object Icons {
     val Ali: Icon = load("/icons/ali.svg")
 
     @JvmField
-    val DeepL: Icon = load("")
+    val DeepL: Icon = load("/icons/deepl.svg")
 
     @JvmField
     val Support: Icon = load("/icons/support.svg")

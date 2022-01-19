@@ -17,6 +17,7 @@
             <li>Youdao translate.</li>
             <li>Alibaba translate.</li>
             <li>Baidu translate.</li>
+            <li>DeepL translate.</li>
         </ul>
     </li>
     <li>Multiple languages inter-translation.</li>
